@@ -1,4 +1,4 @@
-#This program also solves problem 2.25
+#This program also solves problem 2.24
 
 #!/usr/bin/env python3
 import sys 
@@ -17,6 +17,19 @@ alphabetFrequency = {
     'j' : 0.10, 'z' : 0.07 
 }
 
+def decrypt(message, key):
+    plaintext = ""
+    for c in message:
+        if c == ' ':
+            plaintext += ' '
+            continue
+
+        n = ord(c)- 97
+        new_char = (n - key) % 26
+        plaintext += chr(new_char + 97)
+    return plaintext
+
+
 letterCount = {c: 0 for c in alphabet} 
 letterFrequency = dict()
 
@@ -32,20 +45,13 @@ for c in message:
 
 sortedFrequency = dict(sorted(letterFrequency.items(), key=lambda item: item[1], reverse=True))
 
-threshold = 0.9
-for i in range(results):
-    decrypted = message    
-    substitutions = []
-    
-    sortedFrequencyList = [(k, v) for k,v in sortedFrequency.items()]
-    alphabetFrequencyList = [(k, v) for k,v in alphabetFrequency.items()]
-    
-    for i in range(len(sortedFrequencyList)):
-        old = sortedFrequencyList[i][0]
-        new = alphabetFrequencyList[i][0]
-        decrypted = decrypted.replace(old, new)
+messageFrequencyList = [k for (k, v) in sortedFrequency.items()]
+alphabetFrequencyList = [k for (k, v) in alphabetFrequency.items()]
 
-        
-    threshold += 0.1
-    print(decrypted)
-    print()
+for i in range(results):
+    cypherCharacter = ord(messageFrequencyList[i])
+    alphabetCharacter = ord(alphabetFrequencyList[i])
+    
+    key = (cypherCharacter - alphabetCharacter)
+    decrypted = decrypt(message, key)
+    print(decrypted + "\n")
