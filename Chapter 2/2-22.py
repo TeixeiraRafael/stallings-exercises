@@ -9,6 +9,9 @@ def encrypt(message):
     cyphertext = ""
 
     for c in message:
+        if c == ' ':
+            cyphertext += ' '
+            continue
         n = ord(c)- 97
         new_char = (n + rotation) % 26
         cyphertext += chr(new_char + 97)
@@ -19,6 +22,10 @@ def decrypt(message):
     plaintext = ""
 
     for c in message:
+        if c == ' ':
+            plaintext += ' '
+            continue
+
         n = ord(c)- 97
         new_char = (n - rotation) % 26
         plaintext += chr(new_char + 97)
